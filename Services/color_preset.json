@@ -1,0 +1,12 @@
+{
+  "colors": {
+    "red": "lightState.create().on().effect('none').transitionTime(30).rgb(219,20,61)",
+    "blue": "lightState.create().on().effect('none').transitionTime(30).bri(254).hue(45484).sat(254).ct(153).xy(0.1545, 0.0967)",
+    "hotPink": "lightState.create().on().effect('none').transitionTime(30).xy(0.3944, 0.1704)",
+    "purple": "lightState.create().on().effect('none').transitionTime(30).xy(0.1864, 0.0809)",
+    "orange": "lightState.create().on().effect('none').transitionTime(30).xy(0.5335,0.4165)",
+    "green": "lightState.create().on().effect('none').transitionTime(30).bri(254).hue(25468).effect('none').sat(254).ct(153).xy(0.1727, 0.698)",
+    "special": "lightState.create().on().effect('none').transitionTime(30).rgb(64,226,160)",
+    "loopOfColor": "lightState.create().on().colorLoop()"
+  }
+}
