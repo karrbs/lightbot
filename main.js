@@ -5,25 +5,31 @@ var _ = require('lodash');
 var S = require('string');
 var strawP = require('./Services/strawpoll.js');
 var localHue = require('./Services/hue.js');
-
+var twitch = require('./Services/twitch_api/twitch');
+var config = require('config');
 var date = new Date();
 
 // Twitch stuff
 
+var twitchAuth = config.get('twitch.auth.key');
+var twitchChannel = config.get('twitch.channel.name');
+var twitchUser = config.get('twitch.auth.user');
+var twitchCluster = config.get('twitch.connection.cluster');
+var twitchReconnect = config.get('twitch.connection.reconnect');
 
 var twitch_options ={
     options:{
         debug: true
     },
     connection:{
-        cluster:"aws",
-        reconnect:true
+        cluster:twitchCluster,
+        reconnect:twitchReconnect
     },
     identity:{
-        username: "lightlyBot",
-        password: "oauth:hkp77uxcngu8ke8ukifdt868rvurvr"
+        username: twitchUser,
+        password: "oauth:" + twitchAuth
     },
-    channels: ["karrbs"]
+    channels: [twitchChannel]
 };
 
 
@@ -47,11 +53,6 @@ client.connect();
 
 
 client.on("connected", function(){
-    //strawP.createPoll(spPostOpt,function(res){
-       // pollID = res.id;
-        //client.action(userChannel, "The poll for lights is located here: ");
-        //client.action(userChannel, "!lb current");
-    //});
 });
 client.on("chat", function (channel, user, message, self) {
     if (user["user-type"] === "mod") {
@@ -74,7 +75,7 @@ client.on("chat", function (channel, user, message, self) {
                     idxMaxVote = _.indexOf(votes, maxVote);
                     votedColor = colors[idxMaxVote];
 
-                    //localHue.selectedColor(votedColor);
+                    localHue.selectedColor(votedColor);
                     oldPoll = res.choices.id;
                     client.action(userChannel, "The color with the most votes is " + votedColor + ", please enjoy the new color!");
                     return oldPoll

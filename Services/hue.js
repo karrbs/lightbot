@@ -1,6 +1,7 @@
 var hue = require("node-hue-api");
 var HueApi = hue.HueApi;
 var lightState = hue.lightState;
+var config = require('config');
 var presetColor = require("./color_preset.json");
 var S = require('string');
 var _ = require('lodash');
@@ -9,8 +10,8 @@ var displayResult = function(result) {
     console.log(JSON.stringify(result, null, 2));
 };
 
-var hostname = "192.168.1.31",
-    username = "w9COwfjk8uumpeIecadFP5aqgE-jrKkGlE2NegNB",
+var hostname = config.get('phillips.host'),
+    username = config.get('phillips.auth.key'),
     api = new HueApi(hostname, username),
     state;
 
