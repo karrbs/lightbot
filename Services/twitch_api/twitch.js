@@ -1,5 +1,5 @@
 var tmi = require('tmi.js');
-var http = require('http');
+var http = require('axios');
 var _ = require('lodash');
 var S = require('string');
 var config = require('config');
@@ -7,7 +7,7 @@ var util = require('util');
 
 
 
-var clientID = config.get('twitchAPI.clientID');
+var clientID = config.get('twitch.auth.clientId');
 
 /*https://api.twitch.tv/kraken/oauth2/authorize
     ?response_type=code
@@ -29,7 +29,7 @@ var createGetAuth = function(options, res) {
     var fullURL = util.format('%s%s%s%s%s%s%s', baseUrl,clientID,redirectURL,"http://localhost",scope,'chat_login',state,'dev');
 
     console.log(fullURL);
-    request.get(options, function (error, response, body) {
+    http.get(options, function (error, response, body) {
         if (error) {
             return console.error('upload failed:', error);
         }

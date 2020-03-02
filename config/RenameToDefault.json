@@ -1,0 +1,25 @@
+{
+  "options": {
+    "debug": true
+  },
+  "philips": {
+    "host": "",
+    "auth": {
+      "key": ""
+    }
+  },
+  "twitch": {
+    "connection": {
+      "cluster": "aws",
+      "reconnect": "true"
+    },
+    "channel": {
+      "name": "karrbs"
+    },
+    "auth": {
+      "user": "lightlyBot",
+      "clientId": "",
+      "key": ""
+    }
+  }
+}

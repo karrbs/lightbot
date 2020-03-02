@@ -1,104 +1,121 @@
-var tmi = require('tmi.js');
-var hue = require("node-hue-api");
-var http = require('http');
-var _ = require('lodash');
-var S = require('string');
-var strawP = require('./Services/strawpoll.js');
-var localHue = require('./Services/hue.js');
-var twitch = require('./Services/twitch_api/twitch');
-var config = require('config');
+var tmi = require("tmi.js");
+const hue = require("node-hue-api").v3;
+var http = require("http");
+var _ = require("lodash");
+var S = require("string");
+var strawP = require("./Services/strawpoll.js");
+var localHue = require("./Services/hue.js");
+var twitch = require("./Services/twitch_api/twitch.js");
+var config = require("config");
 var date = new Date();
 
 // Twitch stuff
 
-var twitchAuth = config.get('twitch.auth.key');
-var twitchChannel = config.get('twitch.channel.name');
-var twitchUser = config.get('twitch.auth.user');
-var twitchCluster = config.get('twitch.connection.cluster');
-var twitchReconnect = config.get('twitch.connection.reconnect');
+var twitchAuth = config.get("twitch.auth.key");
+var twitchChannel = config.get("twitch.channel.name");
+var twitchUser = config.get("twitch.auth.user");
+var twitchCluster = config.get("twitch.connection.cluster");
+var twitchReconnect = config.get("twitch.connection.reconnect");
 
-var twitch_options ={
-    options:{
-        debug: true
-    },
-    connection:{
-        cluster:twitchCluster,
-        reconnect:twitchReconnect
-    },
-    identity:{
-        username: twitchUser,
-        password: "oauth:" + twitchAuth
-    },
-    channels: [twitchChannel]
+var twitch_options = {
+  options: {
+    debug: true
+  },
+  connection: {
+    cluster: twitchCluster,
+    reconnect: twitchReconnect
+  },
+  identity: {
+    username: twitchUser,
+    password: "oauth:" + twitchAuth
+  },
+  channels: [twitchChannel]
 };
 
-
-
 var spPostOpt = {
-    url: 'http://strawpoll.me/api/v2/polls',
-    timeout: 2000,
-    followAllRedirects: true,
-    headers:'Content-Type: application/json; charset=utf-8',
-    json: strawP.newPollValues
+  url: "https://strawpoll.com/api/poll",
+  data: strawP.newPollValues
 };
 
 var client = new tmi.client(twitch_options);
-var baseURL = 'http://strawpoll.me/';
+var baseURL = "http://strawpoll.com/";
 var userChannel = twitch_options.channels[0];
-var pollID = '';
-var oldPoll = '';
-var votedColor = '';
+var pollID = "";
+var oldPoll = "";
+var votedColor = "";
 
 client.connect();
 
-
-client.on("connected", function(){
-});
-client.on("chat", function (channel, user, message, self) {
-    if (user["user-type"] === "mod") {
-        //command for new poll/old
-        if (message.toLowerCase() === "!lb poll") {
-            if (pollID === oldPoll) {
-                strawP.createPoll(spPostOpt, function (res) {
-                    pollID = res.id;
-                    client.action(userChannel, "The poll for lights is located here: " + baseURL + pollID);
-                    return pollID
-                });
+client.on("connected", function() {});
+client.on("chat", function(channel, user, message, self) {
+  if (user["user-type"] === "mod" || user["username"] === twitchChannel) {
+    //command for new poll/old
+    if (message.toLowerCase() === "!lb poll") {
+      if (pollID === oldPoll) {
+        strawP.createPoll(spPostOpt, function(res) {
+          pollID = res.content_id;
+          client.action(
+            userChannel,
+            "The poll for lights is located here: " + baseURL + pollID
+          );
+          return pollID;
+        });
+      }
+      if (pollID != oldPoll) {
+        strawP.getPoll(spPostOpt.url + "/" + pollID, function(res) {
+          var current = {};
+          res.poll_answers.forEach(z => {
+            var h = 0;
+            if (z.votes > h) {
+              current = z;
             }
-            if(pollID != oldPoll) {
-                strawP.getPoll(spPostOpt.url + '/' + pollID, function (err, res) {
-                    console.log(res);
-                    colors = res.choices.options;
-                    votes = res.choices.votes;
+            votedColor = current.answer;
+          });
 
-                    maxVote = _.max(votes);
-                    idxMaxVote = _.indexOf(votes, maxVote);
-                    votedColor = colors[idxMaxVote];
+          localHue.selectedColor(votedColor);
+          oldPoll = res.id;
+          client.action(
+            userChannel,
+            "The color with the most votes is " +
+              votedColor +
+              ", please enjoy the new color!"
+          );
+          return oldPoll;
+        });
+      }
+    }
 
-                    localHue.selectedColor(votedColor);
-                    oldPoll = res.choices.id;
-                    client.action(userChannel, "The color with the most votes is " + votedColor + ", please enjoy the new color!");
-                    return oldPoll
-                });
-            }
-        }
-
-        //override for color --- does this still work
-        if (message.startsWith("!lb color")) {
-            usersColor = S(message.toLowerCase()).strip('!lb color ').s;
-            client.action(options.channels[0], user['display-name'] + ", the color that was selected is " + usersColor);
-            console.log(user['display-name'] + ", the color that was selected was " + usersColor);
-            localHue.selectedColor(usersColor);
-        };
+    //override for color --- does this still work
+    if (message.startsWith("!lb color")) {
+      usersColor = S(message.toLowerCase()).strip("!lb color ").s;
+      client.action(
+        options.channels[0],
+        user["display-name"] + ", the color that was selected is " + usersColor
+      );
+      console.log(
+        user["display-name"] + ", the color that was selected was " + usersColor
+      );
+      localHue.selectedColor(usersColor);
     }
-    //command for current poll
-    if(message === "!lb current"){
-        if(pollID === oldPoll){
-            client.action(twitch_options.channels[0],  "We are currently in between polls. Please wait for the next one to be published.");
-        }
-        client.action(userChannel,  "This is the current poll ->" + baseURL + pollID);
+  }
+  //command for current poll
+  if (message === "!lb current") {
+    if (pollID === oldPoll) {
+      client.action(
+        twitch_options.channels[0],
+        "We are currently in between polls. Please wait for the next one to be published."
+      );
     }
-    if(message === "!lights"){
-        client.action(userChannel, user['display-name'] + ", we can't all be god and control the lights. So please leave that up to me!")
-    }
+    client.action(
+      userChannel,
+      "This is the current poll ->" + baseURL + pollID
+    );
+  }
+  if (message === "!lights") {
+    client.action(
+      userChannel,
+      user["display-name"] +
+        ", we can't all be god and control the lights. So please leave that up to me!"
+    );
+  }
 });

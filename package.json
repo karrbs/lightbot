@@ -4,15 +4,16 @@
   "description": "Twitch Light bot",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "main.js"
   },
   "author": "Karrbs",
   "license": "ISC",
   "dependencies": {
-    "node-hue-api": "^2.2.0",
-    "request": "^2.71.0",
-    "string": "^3.3.1",
-    "tmi.js": "^0.0.29",
-    "config": "^1.21.0"
+    "axios": "^0.19.2",
+    "config": "latest",
+    "lodash": "latest",
+    "node-hue-api": "latest",
+    "string": "latest",
+    "tmi.js": "latest"
   }
 }
