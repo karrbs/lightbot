@@ -12,6 +12,7 @@
   "twitch": {
     "connection": {
       "cluster": "aws",
+      "secure": true,
       "reconnect": "true"
     },
     "channel": {

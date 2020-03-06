@@ -1,19 +1,21 @@
-var tmi = require("tmi.js");
-const hue = require("node-hue-api").v3;
-var http = require("http");
-var _ = require("lodash");
+#!/usr/bin/env node
+process.env["NODE_CONFIG_DIR"] = __dirname + "/config/";
+const tmi = require("tmi.js");
+// const hue = require("node-hue-api").v3;
+// var _ = require("lodash");
 var S = require("string");
 var strawP = require("./Services/strawpoll.js");
 var localHue = require("./Services/hue.js");
 var twitch = require("./Services/twitch_api/twitch.js");
 var config = require("config");
-var date = new Date();
+// var date = new Date();
 
 var twitchAuth = config.get("twitch.auth.key");
 var twitchChannel = config.get("twitch.channel.name");
-var twitchUser = config.get("twitch.auth.user");
+var twitchUser = config.get("twitch.auth.botName");
 var twitchCluster = config.get("twitch.connection.cluster");
 var twitchReconnect = config.get("twitch.connection.reconnect");
+var twitchSecure = config.get("twitch.connection.secure");
 
 var twitch_options = {
   options: {
@@ -21,6 +23,7 @@ var twitch_options = {
   },
   connection: {
     cluster: twitchCluster,
+    secure: twitchSecure,
     reconnect: twitchReconnect
   },
   identity: {

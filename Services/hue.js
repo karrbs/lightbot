@@ -1,9 +1,6 @@
 var hue = require("node-hue-api").v3;
-const HueApi = hue.HueApi;
 var LightState = require("node-hue-api").v3.lightStates.LightState;
 var config = require("config");
-var S = require("string");
-var _ = require("lodash");
 
 var hostname = config.get("philips.host"),
   username = config.get("philips.auth.key"),

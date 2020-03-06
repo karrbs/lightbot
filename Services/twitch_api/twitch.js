@@ -1,7 +1,4 @@
-var tmi = require("tmi.js");
 var http = require("axios");
-var _ = require("lodash");
-var S = require("string");
 var config = require("config");
 var util = require("util");
 
