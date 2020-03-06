@@ -1,14 +1,10 @@
 #!/usr/bin/env node
 process.env["NODE_CONFIG_DIR"] = __dirname + "/config/";
 const tmi = require("tmi.js");
-// const hue = require("node-hue-api").v3;
-// var _ = require("lodash");
-var S = require("string");
 var strawP = require("./Services/strawpoll.js");
 var localHue = require("./Services/hue.js");
 var twitch = require("./Services/twitch_api/twitch.js");
 var config = require("config");
-// var date = new Date();
 
 var twitchAuth = config.get("twitch.auth.key");
 var twitchChannel = config.get("twitch.channel.name");
@@ -87,7 +83,7 @@ client.on("chat", function(channel, user, message, self) {
     }
 
     if (message.startsWith("!lb color")) {
-      usersColor = S(message.toLowerCase()).strip("!lb color ").s;
+      usersColor = message.toLowerCase().strip("!lb color ");
       client.action(
         twitch_options.channels[0],
         user["display-name"] + ", the color that was selected is " + usersColor

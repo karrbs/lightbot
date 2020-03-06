@@ -1,19 +1,29 @@
 {
   "name": "lightlyBot",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Twitch Light bot",
   "main": "main.js",
   "scripts": {
     "start": "main.js"
   },
   "author": "Karrbs",
+  "contributors": [
+    "Karlan Bousquet <krbousquuet@gmail.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/karrb/lightbot.git"
+  },
   "license": "ISC",
   "dependencies": {
     "axios": "^0.19.2",
     "config": "latest",
     "lodash": "latest",
     "node-hue-api": "latest",
-    "string": "latest",
-    "tmi.js": "latest"
+    "tmi.js": "latest",
+    "yargs": "^15.1.0"
+  },
+  "bin": {
+    "lightlybot": "main.js"
   }
 }
