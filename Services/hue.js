@@ -7,6 +7,7 @@ var _ = require("lodash");
 
 var hostname = config.get("philips.host"),
   username = config.get("philips.auth.key"),
+  light = config.get("philips.light"),
   state;
 
 var selectedColor = function(color) {
@@ -84,12 +85,12 @@ var selectedColor = function(color) {
   hue.discovery
     .nupnpSearch()
     .then(searchResults => {
-      const host = searchResults[0].ipaddress;
+      // const host = searchResults[0].ipaddress; //finds ip
       return hue.api.createLocal(hostname).connect(username);
     })
     .then(api => {
       return api.lights
-        .setLightState(4, state)
+        .setLightState(light, state)
         .then(result => {
           console.log(`Light state change was successful? ${result}`);
         })

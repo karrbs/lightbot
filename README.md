@@ -1,7 +1,7 @@
 # lightlybot
 Lightly Bot is a twitch boat that allows a stream to have the viewers of their stream vote on the light color of the streamers Philips Hue lighting.
-## Things to know
 
+## Things to know
 I am are currently using the www.strawpoll.com for the polling system until I have time to develope a polling system.
 
 While this project is currently written in node.js I am looking at redeveloping this in GO and Vue or maybe even Dart.  
@@ -17,8 +17,8 @@ If you have an issue please log it with details on how you got the issue.
 
 # Setup
 1. Download this repo
-2. Rename the .json file in the config folder to `Default.json`
-3. Fill all the blank spaces in the `Default.json` file
+2. Rename the .json file in the config folder to `default.json`
+3. Fill all the blank spaces in the `default.json` file
 
 # Configuration
 ```JSON
@@ -28,6 +28,7 @@ If you have an issue please log it with details on how you got the issue.
   },
   "philips": {
     "host": "", // IP of your Philips Hue bridge
+    "light": , // Number of the light you want to change 
     "auth": {
       "key": "" // Set to the key give to the user.
     }
@@ -38,7 +39,7 @@ If you have an issue please log it with details on how you got the issue.
       "reconnect": "true"
     },
     "channel": {
-      "name": "karrbs"
+      "name": "" //Replace with name of the twitch chat you want the bot to join
     },
     "auth": {
       "user": "lightlyBot",

@@ -4,6 +4,7 @@
   },
   "philips": {
     "host": "",
+    "light": 0,
     "auth": {
       "key": ""
     }

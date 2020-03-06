@@ -9,8 +9,6 @@ var twitch = require("./Services/twitch_api/twitch.js");
 var config = require("config");
 var date = new Date();
 
-// Twitch stuff
-
 var twitchAuth = config.get("twitch.auth.key");
 var twitchChannel = config.get("twitch.channel.name");
 var twitchUser = config.get("twitch.auth.user");
@@ -85,11 +83,10 @@ client.on("chat", function(channel, user, message, self) {
       }
     }
 
-    //override for color --- does this still work
     if (message.startsWith("!lb color")) {
       usersColor = S(message.toLowerCase()).strip("!lb color ").s;
       client.action(
-        options.channels[0],
+        twitch_options.channels[0],
         user["display-name"] + ", the color that was selected is " + usersColor
       );
       console.log(
@@ -110,6 +107,14 @@ client.on("chat", function(channel, user, message, self) {
       userChannel,
       "This is the current poll ->" + baseURL + pollID
     );
+  }
+  if (user["username"] === "heidi_kristine") {
+    if (message === "!smite") {
+      client.action(
+        userChannel,
+        "The almighty goddess of the chat , just smited Steampunktempest. He appears to still be breathing somehow."
+      );
+    }
   }
   if (message === "!lights") {
     client.action(
