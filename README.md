@@ -15,10 +15,25 @@ If you have an issue please log it with details on how you got the issue.
 - [ ] Create auto configuration of Philips Hue bridge
 - [ ] Create auto authentication for Twitch account
 
+
+# Requirements
+- Node.js
+- NPM
+
 # Setup
 1. Download this repo
-2. Rename the .json file in the config folder to `default.json`
-3. Fill all the blank spaces in the `default.json` file
+2. Navigate to the downloaded repo *(if you downloaded .zip unzip the file)*
+3. Navigate to the config folder
+4. Rename the .json file in the config folder from `RenameToDefault.json` to `default.json`
+5. Use the [configuration](#configuration) section fill all the blank spaces in the `default.json` file 
+
+# Installation
+1. Open up terminal or CMD 
+2. Navigate to inside of the extracted or downloaded of the repo
+3. Type and run `npm install` or `sudo npm install`
+4. Type and run `npm install -g .` or `sudo npm install -g .`
+5. To test run `lightlybot`
+6. Ctr + C to close
 
 # Configuration
 ```JSON
@@ -36,6 +51,7 @@ If you have an issue please log it with details on how you got the issue.
   "twitch": {
     "connection": {
       "cluster": "aws",
+      "secure": true,
       "reconnect": "true"
     },
     "channel": {
