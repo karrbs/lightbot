@@ -19,7 +19,7 @@
       "name": "karrbs"
     },
     "auth": {
-      "user": "lightlyBot",
+      "botName": "lightlyBot",
       "clientId": "",
       "key": ""
     }

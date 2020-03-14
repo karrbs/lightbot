@@ -58,7 +58,7 @@ If you have an issue please log it with details on how you got the issue.
       "name": "" //Replace with name of the twitch chat you want the bot to join
     },
     "auth": {
-      "user": "lightlyBot",
+      "botName": "lightlyBot", //bot name
       "clientId":"", // given by twitch
       "key": "" // given by twitch
     }
